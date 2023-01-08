@@ -101,7 +101,7 @@ def channels_settings(request, channel_id):
 def channels_messages(request, channel_id):
     Membership.objects.get(user=request.user, channel=channel_id)
     channel = Channel.objects.get(id=channel_id)
-    messages = Message.objects.filter(channel=channel)
+    messages = Message.objects.filter(channel=channel).order_by('-published')[:10]
 
     if request.method == 'POST':
         pass
@@ -120,6 +120,7 @@ def channels_messages(request, channel_id):
                     'username': message.user.username
                 },
                 'content': message.content,
+                'published': message.published
             }
             for message in messages
         ]
