@@ -48,3 +48,9 @@
     white-space: nowrap;
     -webkit-overflow-scrolling: touch;
 }
+
+@media (min-width: 768px) {
+    .message-box {
+        margin-left: 380px;
+    }
+}
