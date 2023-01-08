@@ -10,6 +10,9 @@ class Channel(models.Model):
     def __str__(self):
         return 'Channel: ' + self.name
 
+    def lastMessage(self):
+        return self.message_set.order_by('-published').first()
+
 class Message(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     channel = models.ForeignKey(Channel, on_delete=models.CASCADE)
