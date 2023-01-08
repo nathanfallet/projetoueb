@@ -33,8 +33,8 @@ git commit -m "Added an awesome feature"
 
 When the feature is ready, push the branch to the remote repository:
 
-```
-bash git push
+```bash
+git push
 ```
 
 Or if you push the branch for the first time:
