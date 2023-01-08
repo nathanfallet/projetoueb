@@ -13,11 +13,11 @@ def index(request):
 
     template = loader.get_template('index.html')
     context = {
-        memberships: memberships
+        'memberships': memberships
     }
     return HttpResponse(template.render(context, request))
 
-def login(request):
+def account_login(request):
     if request.user.is_authenticated:
         return redirect('/')
     
@@ -32,23 +32,26 @@ def login(request):
         else:
             error = 'Invalid username or password'
 
-    template = loader.get_template('login.html')
+    template = loader.get_template('account.html')
     context = {
+        'page': 'login',
         'error': error
     }
     return HttpResponse(template.render(context, request))
 
-def register(request):
+def account_register(request):
     if request.user.is_authenticated:
         return redirect('/')
     
     # TODO: register user
 
-    template = loader.get_template('register.html')
-    context = {}
+    template = loader.get_template('account.html')
+    context = {
+        'page': 'register'
+    }
     return HttpResponse(template.render(context, request))
 
-def logout_view(request):
+def account_logout(request):
     logout(request)
     return redirect('/')
 
@@ -69,11 +72,14 @@ def channels_new(request):
 
 @login_required
 def channels_view(request, channel_id):
+    memberships = Membership.objects.filter(user=request.user)
+
     Membership.objects.get(user=request.user, channel=channel_id)
     channel = Channel.objects.get(id=channel_id)
 
-    template = loader.get_template('channels_view.html')
+    template = loader.get_template('index.html')
     context = {
+        'memberships': memberships,
         'channel': {
             'id': channel.id,
             'name': channel.name,
