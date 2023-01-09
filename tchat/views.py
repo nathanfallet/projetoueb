@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.template import loader
@@ -43,11 +44,22 @@ def account_register(request):
     if request.user.is_authenticated:
         return redirect('/')
     
-    # TODO: register user
+    error = None
+    if request.method == 'POST':
+        username = request.POST['username']
+        email = request.POST['email']
+        password = request.POST['password']
+        try:
+            user = User.objects.create_user(username, email, password)
+            login(request, user)
+            return redirect('/')
+        except:
+            error = 'Username or email already taken'
 
     template = loader.get_template('account.html')
     context = {
-        'page': 'register'
+        'page': 'register',
+        'error': error
     }
     return HttpResponse(template.render(context, request))
 
