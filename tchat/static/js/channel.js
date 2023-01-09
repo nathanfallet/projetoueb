@@ -51,7 +51,7 @@ function sendMessage(id) {
             "content": text
         },
         success: function (data) {
-            console.log("Message sent");
+            updateHTML(data);
         }
     });
 }
