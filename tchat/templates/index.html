@@ -51,12 +51,10 @@
         <span class="fs-5 fw-semibold">{{ channel.name }}</span>
       </a>
 
-      <div id="channel-messages">
-        Messages here
-      </div>
+      <div id="channel-messages"></div>
 
       <div class="p-3 border-top position-fixed fixed-bottom message-box">
-        <form id="message-form" class="w-100" onsubmit="event.preventDefault(); sendMessage();">
+        <form id="message-form" class="w-100" onsubmit="event.preventDefault(); sendMessage({{ channel.id }});">
           <div class="input-group">
             <input type="text" id="message-text" class="form-control" placeholder="Message" aria-label="Message"
               aria-describedby="button-addon2">
@@ -65,9 +63,6 @@
         </form>
       </div>
     </div>
-
-    <script src="{% static 'js/channel.js' %}" type="text/javascript"></script>
-    <script type="text/javascript">loadConversation({{ channel.id }})</script>
     {% endif %}
   </main>
 
@@ -76,6 +71,11 @@
     crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.min.js"
     integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+
+  {% if channel %}
+  <script src="{% static 'js/channel.js' %}" type="text/javascript"></script>
+  <script type="text/javascript">loadConversation({{ channel.id }})</script>
+  {% endif %}
 </body>
 
 </html>

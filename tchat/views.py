@@ -107,10 +107,13 @@ def channels_settings(request, channel_id):
 def channels_messages(request, channel_id):
     Membership.objects.get(user=request.user, channel=channel_id)
     channel = Channel.objects.get(id=channel_id)
-    messages = Message.objects.filter(channel=channel).order_by('-published')[:10]
 
     if request.method == 'POST':
-        pass
+        content = request.POST['content']
+        message = Message(user=request.user, channel=channel, content=content, published=timezone.now())
+        message.save()
+
+    messages = Message.objects.filter(channel=channel).order_by('-published')[:10]
     
     return JsonResponse({
         'channel': {
