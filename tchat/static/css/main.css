@@ -88,10 +88,11 @@
 }
 
 .tchat-wrapper {
+    padding-top: 70px;
     padding-bottom: 80px;
 }
 
-.message-box {
+.message-box, .tchat-header {
     background-color: white;
 }
 
@@ -109,18 +110,26 @@
     overflow-x: hidden;
 }
 
+.tchat-conversations {
+    width: 100%;
+}
+
 @media (min-width: 768px) {
     
     .bd-placeholder-img-lg {
         font-size: 3.5rem;
     }
 
-    .message-box {
+    .message-box, .tchat-wrapper, .tchat-header {
         margin-left: 380px;
     }
 
     .balon1 span, .balon2 span {
         max-width: calc(75vw - 380px);
+    }
+
+    .tchat-conversations {
+        width: 380px;
     }
     
 }

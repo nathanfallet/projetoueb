@@ -19,9 +19,7 @@
   <main class="d-flex flex-nowrap">
     <h1 class="visually-hidden">Projet Oueb</h1>
 
-    <div
-      class="d-flex flex-column align-items-stretch flex-fill flex-shrink-0 bg-white {% if channel %}d-none d-md-flex{% endif %}"
-      style="max-width: 380px;">
+    <div class="tchat-conversations d-flex flex-column align-items-stretch flex-fill flex-shrink-0 bg-white position-fixed fixed-top {% if channel %}d-none d-md-flex{% endif %}">
       <a href="/" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
         <span class="fs-5 fw-semibold">Conversations</span>
       </a>
@@ -47,7 +45,7 @@
 
     {% if channel %}
     <div class="d-flex flex-column align-items-stretch flex-fill flex-shrink-0 bg-white">
-      <a href="/" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
+      <a href="/" class="tchat-header d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom position-fixed fixed-top w-100">
         <span class="fs-5 fw-semibold">{{ channel.name }}</span>
       </a>
 
