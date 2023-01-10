@@ -17,6 +17,12 @@ function getCookie(name) {
 function updateHTML(data) {
     // TODO: Update #channel-messages
     console.log(data.messages);
+    var items = [];
+    $.each(data.messages, (_, message) => {
+        items.push("<div class='media.body'>" + message['content'] + " - envoyé par " + message['user']['username']
+         + " le " + new Date(message['published']).toLocaleString() + "</div>")
+    });
+    $("#channel-messages").html(items.join(""));
 }
 
 function loadConversation(id) {
