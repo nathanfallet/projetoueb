@@ -51,7 +51,7 @@
         <span class="fs-5 fw-semibold">{{ channel.name }}</span>
       </a>
 
-      <div id="channel-messages"></div>
+      <div id="channel-messages" class="card border-0 m-0 p-0 position-relative bg-transparent"></div>
 
       <div class="p-3 border-top position-fixed fixed-bottom message-box">
         <form id="message-form" class="w-100" onsubmit="event.preventDefault(); sendMessage({{ channel.id }});">

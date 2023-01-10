@@ -1,3 +1,5 @@
+var messages = [];
+
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -14,13 +16,35 @@ function getCookie(name) {
     return cookieValue;
 }
 
-function updateHTML(data) {
-    // TODO: Update #channel-messages
-    console.log(data.messages);
+function saveData(data) {
+    // Add messages that are not already saved
+    for (let i = 0; i < data.messages.length; i++) {
+        let found = false;
+        for (let j = 0; j < messages.length; j++) {
+            if (messages[j].id === data.messages[i].id) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            messages.push(data.messages[i]);
+        }
+    }
+    // Sort by date
+    messages.sort((a, b) => {
+        return new Date(a['published']) - new Date(b['published']);
+    });
+    // Update HTML (DOM)
+    updateHTML();
+}
+
+function updateHTML() {
     var items = [];
-    $.each(data.messages, (_, message) => {
-        items.push("<div class='media.body'>" + message['content'] + " - envoyé par " + message['user']['username']
-         + " le " + new Date(message['published']).toLocaleString() + "</div>")
+    $.each(messages, (_, message) => {
+        items.push("<div class='balon" + (message['user']['me'] ? '1' : '2') + " p-2 m-0 position-relative' data-is='"
+            + message['user']['username'] + " - "
+            + new Date(message['published']).toLocaleString() + "'><span class='float-" + (message['user']['me'] ? 'end' : 'start') + "'>"
+            + message['content'] + "</span></div>")
     });
     $("#channel-messages").html(items.join(""));
 }
@@ -31,7 +55,7 @@ function loadConversation(id) {
         url: "/channels/" + id + "/messages/",
         type: "GET",
         success: function (data) {
-            updateHTML(data);
+            saveData(data);
         }
     });
 
@@ -57,7 +81,7 @@ function sendMessage(id) {
             "content": text
         },
         success: function (data) {
-            updateHTML(data);
+            saveData(data);
         }
     });
 }

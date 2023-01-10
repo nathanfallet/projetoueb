@@ -138,7 +138,8 @@ def channels_messages(request, channel_id):
                 'id': message.id,
                 'user': {
                     'id': message.user.id,
-                    'username': message.user.username
+                    'username': message.user.username,
+                    'me': message.user.id == request.user.id
                 },
                 'content': message.content,
                 'published': message.published
