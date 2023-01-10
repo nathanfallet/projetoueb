@@ -84,14 +84,11 @@ def channels_new(request):
 
 @login_required
 def channels_view(request, channel_id):
-    memberships = Membership.objects.filter(user=request.user)
-
     Membership.objects.get(user=request.user, channel=channel_id)
     channel = Channel.objects.get(id=channel_id)
 
     template = loader.get_template('index.html')
     context = {
-        'memberships': memberships,
         'channel': {
             'id': channel.id,
             'name': channel.name,

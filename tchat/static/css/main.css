@@ -111,6 +111,7 @@
 }
 
 .tchat-conversations {
+    padding-top: 70px;
     width: 100%;
 }
 
@@ -118,18 +119,6 @@
     
     .bd-placeholder-img-lg {
         font-size: 3.5rem;
-    }
-
-    .message-box, .tchat-wrapper, .tchat-header {
-        margin-left: 380px;
-    }
-
-    .balon1 span, .balon2 span {
-        max-width: calc(75vw - 380px);
-    }
-
-    .tchat-conversations {
-        width: 380px;
     }
     
 }
