@@ -106,7 +106,7 @@
 }
 
 .list-group-item {
-    overflow-y: hidden;
+    overflow-x: hidden;
 }
 
 @media (min-width: 768px) {
