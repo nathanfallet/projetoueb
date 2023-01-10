@@ -116,7 +116,7 @@ def channels_settings(request, channel_id):
     return HttpResponse(template.render(context, request))
 
 @login_required
-def channels_messages(request, channel_id):
+def channels_messages(request, channel_id, page=1):
     Membership.objects.get(user=request.user, channel=channel_id)
     channel = Channel.objects.get(id=channel_id)
 
@@ -125,7 +125,7 @@ def channels_messages(request, channel_id):
         message = Message(user=request.user, channel=channel, content=content, published=timezone.now())
         message.save()
 
-    messages = Message.objects.filter(channel=channel).order_by('-published')[:10]
+    messages = Message.objects.filter(channel=channel).order_by('-published')[(page-1)*10:(page)*10]
     
     return JsonResponse({
         'channel': {
@@ -138,7 +138,8 @@ def channels_messages(request, channel_id):
                 'id': message.id,
                 'user': {
                     'id': message.user.id,
-                    'username': message.user.username
+                    'username': message.user.username,
+                    'me': message.user.id == request.user.id
                 },
                 'content': message.content,
                 'published': message.published
