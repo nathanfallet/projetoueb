@@ -87,6 +87,24 @@
     color: rgba(84, 110, 122, 1.0);
 }
 
+.tchat-wrapper {
+    padding-bottom: 80px;
+}
+
+.message-box {
+    background-color: white;
+}
+
+.btn-custom {
+    color: white;
+    background-color: #42a5f5;
+}
+
+.btn-custom:hover {
+    color: white;
+    background-color: #2285d5;
+}
+
 @media (min-width: 768px) {
     
     .bd-placeholder-img-lg {

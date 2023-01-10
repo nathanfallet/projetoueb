@@ -1,4 +1,5 @@
 var messages = [];
+var page = 1;
 
 function getCookie(name) {
     let cookieValue = null;
@@ -47,6 +48,21 @@ function updateHTML() {
             + message['content'] + "</span></div>")
     });
     $("#channel-messages").html(items.join(""));
+}
+
+function loadNextPage(id) {
+    // Get messages from JSON
+    page++;
+    $.ajax({
+        url: "/channels/" + id + "/messages/" + page,
+        type: "GET",
+        success: function (data) {
+            if (data.messages.length == 0) {
+                $("#tchat-more").remove();
+            }
+            saveData(data);
+        }
+    });
 }
 
 function loadConversation(id) {
