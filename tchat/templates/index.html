@@ -22,10 +22,84 @@
 
     {% if channel %}
     <div class="d-flex flex-column align-items-stretch flex-fill flex-shrink-0 bg-white">
+      {% if settings %}
+      <span
+        class="tchat-header d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom position-fixed fixed-top w-100">
+        <a href="/channels/{{ channel.id }}/"><i class="fa-solid fa-chevron-left"></i></a>
+        <span class="fs-5 fw-semibold px-2">Settings</span>
+      </span>
+
+      <div class="tchat-wrapper px-3">
+        <div class="mt-2 border-bottom">
+          <strong class="mb-0">Members</strong>
+          <p>Members of the conversation</p>
+        </div>
+        <div class="list-group list-group-flush border-bottom scrollarea">
+          {% for membership in channel.membership_set.all %}
+          <a href="#" class="list-group-item list-group-item-action py-3 lh-sm">
+            <div class="d-flex w-100 align-items-center justify-content-between">
+              <strong class="mb-1">{{ membership.user.username }} - {{ membership.role }}</strong>
+            </div>
+          </a>
+          {% endfor %}
+          <a href="#" class="list-group-item list-group-item-action py-3 lh-sm" data-bs-toggle="modal" data-bs-target="#addUserModal">
+            <div class="d-flex w-100 align-items-center justify-content-between">
+              <strong class="mb-1"><i class="fa-solid fa-plus"></i> Add user</strong>
+            </div>
+          </a>
+        </div>
+        <!--
+        <div class="mt-3 border-bottom">
+          <strong class="mb-0">More...</strong>
+          <p>Leave conversation, etc...</p>
+        </div>
+        <div class="list-group list-group-flush border-bottom scrollarea">
+          <a href="#" class="list-group-item list-group-item-action py-3 lh-sm">
+            <div class="d-flex w-100 align-items-center justify-content-between">
+              <strong class="mb-1">Leave conversation</strong>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action py-3 lh-sm">
+            <div class="d-flex w-100 align-items-center justify-content-between">
+              <strong class="mb-1">Delete conversation</strong>
+            </div>
+          </a>
+        </div>
+        -->
+      </div>
+
+      <!-- Bootstrap modal with a select to choose a user to add to the conversation -->
+      <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addUserModalLabel">Add user</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form id="add-user-form" class="w-100" onsubmit="event.preventDefault(); addUserToChannel({{ channel.id }})">
+                <div class="mb-3">
+                  <label for="user-select" class="form-label">User</label>
+                  <select class="form-select" id="user-select">
+                    {% for user in users %}
+                    <option value="{{ user.id }}">{{ user.username }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-custom">Add user</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% else %}
       <span
         class="tchat-header d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom position-fixed fixed-top w-100">
         <a href="/"><i class="fa-solid fa-chevron-left"></i></a>
         <span class="fs-5 fw-semibold px-2">{{ channel.name }}</span>
+        <div class="ms-auto">
+          <a href="/channels/{{ channel.id }}/settings/"><i class="fa-solid fa-gear"></i></a>
+        </div>
       </span>
 
       <div class="tchat-wrapper">
@@ -44,6 +118,7 @@
           </div>
         </form>
       </div>
+      {% endif %}
     </div>
     {% else %}
     <div
@@ -72,9 +147,9 @@
     crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.min.js"
     integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+  <script src="{% static 'js/main.js' %}" type="text/javascript"></script>
 
-  {% if channel %}
-  <script src="{% static 'js/channel.js' %}" type="text/javascript"></script>
+  {% if channel and not settings %}
   <script type="text/javascript">loadConversation({{ channel.id }})</script>
   {% endif %}
 </body>

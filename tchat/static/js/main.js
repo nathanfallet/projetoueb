@@ -101,3 +101,24 @@ function sendMessage(id) {
         }
     });
 }
+
+function addUserToChannel(id) {
+    // Get user
+    let text = $("#user-select").val();
+
+    // Send it to server
+    const csrftoken = getCookie('csrftoken');
+    $.ajax({
+        url: "/channels/" + id + "/users/",
+        type: "POST",
+        headers: {
+            "X-CSRFToken": csrftoken
+        },
+        data: {
+            "user": text
+        },
+        success: function (data) {
+            location.reload();
+        }
+    });
+}
