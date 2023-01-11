@@ -89,11 +89,7 @@ def channels_view(request, channel_id):
 
     template = loader.get_template('index.html')
     context = {
-        'channel': {
-            'id': channel.id,
-            'name': channel.name,
-            'logo': channel.logo
-        }
+        'channel': channel
     }
     return HttpResponse(template.render(context, request))
 
@@ -101,14 +97,13 @@ def channels_view(request, channel_id):
 def channels_settings(request, channel_id):
     Membership.objects.get(user=request.user, channel=channel_id)
     channel = Channel.objects.get(id=channel_id)
+    users = User.objects.exclude(id__in=[ membership.user.id for membership in channel.membership_set.all() ])
 
-    template = loader.get_template('channels_settings.html')
+    template = loader.get_template('index.html')
     context = {
-        'channel': {
-            'id': channel.id,
-            'name': channel.name,
-            'logo': channel.logo
-        }
+        'channel': channel,
+        'users': users,
+        'settings': True
     }
     return HttpResponse(template.render(context, request))
 
@@ -142,5 +137,27 @@ def channels_messages(request, channel_id, page=1):
                 'published': message.published
             }
             for message in messages
+        ]
+    })
+
+@login_required
+def channels_users(request, channel_id):
+    Membership.objects.get(user=request.user, channel=channel_id)
+    channel = Channel.objects.get(id=channel_id)
+
+    if request.method == 'POST':
+        user_id = request.POST['user']
+        user = User.objects.get(id=user_id)
+        membership = Membership(user=user, channel=channel, role='member', last_read=timezone.now())
+        membership.save()
+
+    return JsonResponse({
+        'users': [
+            {
+                'id': membership.user.id,
+                'username': membership.user.username,
+                'role': membership.role
+            }
+            for membership in channel.membership_set.all()
         ]
     })
