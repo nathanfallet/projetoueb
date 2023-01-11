@@ -122,3 +122,24 @@ function addUserToChannel(id) {
         }
     });
 }
+
+function createChannel() {
+    // Get channel name
+    let name = $("#channel-name").val();
+
+    // Send it to server
+    const csrftoken = getCookie('csrftoken');
+    $.ajax({
+        url: "/channels/",
+        type: "POST",
+        headers: {
+            "X-CSRFToken": csrftoken
+        },
+        data: {
+            "name": name
+        },
+        success: function (data) {
+            location.reload();
+        }
+    });
+}

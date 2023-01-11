@@ -68,7 +68,6 @@
         -->
       </div>
 
-      <!-- Bootstrap modal with a select to choose a user to add to the conversation -->
       <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -126,6 +125,9 @@
       <span
         class="tchat-header d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom position-fixed fixed-top">
         <span class="fs-5 fw-semibold">Conversations</span>
+        <div class="ms-auto">
+          <a href="#" data-bs-toggle="modal" data-bs-target="#createChannelModal"><i class="fa-solid fa-plus"></i></a>
+        </div>
       </span>
       <div class="list-group list-group-flush border-bottom scrollarea">
         {% for membership in memberships %}
@@ -137,6 +139,27 @@
           <div class="col-10 mb-1 small">{{ membership.channel.lastMessage.content }}</div>
         </a>
         {% endfor %}
+      </div>
+    </div>
+
+    <div class="modal fade" id="createChannelModal" tabindex="-1" aria-labelledby="createChannelModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="createChannelModalLabel">Create conversation</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="create-channel-form" class="w-100" onsubmit="event.preventDefault(); createChannel()">
+              <div class="mb-3">
+                <label for="channel-name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="channel-name" placeholder="Conversation name">
+              </div>
+              <button type="submit" class="btn btn-custom">Create conversation</button>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
     {% endif %}

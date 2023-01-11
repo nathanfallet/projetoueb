@@ -68,7 +68,7 @@ def account_logout(request):
     return redirect('/')
 
 @login_required
-def channels_new(request):
+def channels(request):
     if request.method == 'POST':
         name = request.POST['name']
         logo = 'https://via.placeholder.com/150' # TODO: upload logo
@@ -76,12 +76,18 @@ def channels_new(request):
         channel.save()
         membership = Membership(user=request.user, channel=channel, role='owner', last_read=timezone.now())
         membership.save()
-        return redirect('/channels/%d/' % channel.id)
 
-    template = loader.get_template('channels_new.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
-
+    memberships = Membership.objects.filter(user=request.user)
+    return JsonResponse({
+        'channels': [
+            {
+                'id': membership.channel.id,
+                'name': membership.channel.name,
+                'logo': membership.channel.logo
+            }
+            for membership in memberships
+        ]
+    })
 @login_required
 def channels_view(request, channel_id):
     Membership.objects.get(user=request.user, channel=channel_id)
