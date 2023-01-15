@@ -115,6 +115,14 @@
     width: 100%;
 }
 
+#emoji-keyboard {
+    position: fixed;
+    bottom: 70px;
+    right: 0px;
+    max-width: 25%;
+    padding: 8px;
+}
+
 @media (min-width: 768px) {
     
     .bd-placeholder-img-lg {
