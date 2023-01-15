@@ -36,11 +36,16 @@
         </div>
         <div class="list-group list-group-flush border-bottom scrollarea">
           {% for membership in channel.membership_set.all %}
-          <a href="#" class="list-group-item list-group-item-action py-3 lh-sm">
+          <span href="#" class="list-group-item list-group-item-action py-3 lh-sm">
             <div class="d-flex w-100 align-items-center justify-content-between">
               <strong class="mb-1">{{ membership.user.username }} - {{ membership.role }}</strong>
+              <div class="ms-auto">
+                {% if membership.role != 'owner' %}
+                <button onclick="deleteUser({{ channel.id }}, {{ membership.user.id }});"><i class="fa-solid fa-trash"></i></button>
+                {% endif %}
+              </div>
             </div>
-          </a>
+          </span>
           {% endfor %}
           <a href="#" class="list-group-item list-group-item-action py-3 lh-sm" data-bs-toggle="modal" data-bs-target="#addUserModal">
             <div class="d-flex w-100 align-items-center justify-content-between">

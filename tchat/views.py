@@ -147,7 +147,7 @@ def channels_messages(request, channel_id, page=1):
     })
 
 @login_required
-def channels_users(request, channel_id):
+def channels_users(request, channel_id, user_id=None):
     Membership.objects.get(user=request.user, channel=channel_id)
     channel = Channel.objects.get(id=channel_id)
 
@@ -156,6 +156,10 @@ def channels_users(request, channel_id):
         user = User.objects.get(id=user_id)
         membership = Membership(user=user, channel=channel, role='member', last_read=timezone.now())
         membership.save()
+    
+    if request.method == 'DELETE' and user_id is not None:
+        membership = Membership.objects.get(user=user_id, channel=channel_id)
+        membership.delete()
 
     return JsonResponse({
         'users': [

@@ -154,3 +154,18 @@ function insertEmoji(emo) {
     let text = $("#message-text").val();
     $("#message-text").val(text + emo);
 }
+
+function deleteUser(channel, user) {
+    // Send it to server
+    const csrftoken = getCookie('csrftoken');
+    $.ajax({
+        url: "/channels/" + channel + "/users/" + user,
+        type: "DELETE",
+        headers: {
+            "X-CSRFToken": csrftoken
+        },
+        success: function (data) {
+            location.reload();
+        }
+    });
+}

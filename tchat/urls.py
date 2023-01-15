@@ -13,4 +13,5 @@ urlpatterns = [
     path('channels/<int:channel_id>/messages/', views.channels_messages, name='channels_messages'),
     path('channels/<int:channel_id>/messages/<int:page>', views.channels_messages, name='channels_messages'),
     path('channels/<int:channel_id>/users/', views.channels_users, name='channels_users'),
+    path('channels/<int:channel_id>/users/<int:user_id>', views.channels_users, name='channels_users'),
 ]
