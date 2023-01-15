@@ -1,5 +1,6 @@
 var messages = [];
 var page = 1;
+var emojisToggled = false;
 
 function getCookie(name) {
     let cookieValue = null;
@@ -142,4 +143,14 @@ function createChannel() {
             location.reload();
         }
     });
+}
+
+function showEmojis() {
+    emojisToggled = !emojisToggled;
+    $("#emoji-keyboard").css('display', emojisToggled ? 'block' : 'none');
+}
+
+function insertEmoji(emo) {
+    let text = $("#message-text").val();
+    $("#message-text").val(text + emo);
 }

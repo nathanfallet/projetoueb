@@ -114,6 +114,13 @@
             <input type="text" id="message-text" class="form-control" placeholder="Message" aria-label="Message"
               aria-describedby="button-addon2">
             <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Send</button>
+            <button class="btn btn-outline-secondary" onclick="event.preventDefault(); showEmojis();">Emojis</button>
+            <div id="emoji-keyboard" style="display: none;">
+              <button class="btn-emo" onclick="event.preventDefault(); insertEmoji('😀');">😀</button>
+              <button class="btn-emo" onclick="event.preventDefault(); insertEmoji('😘');">😘</button>
+              <button class="btn-emo" onclick="event.preventDefault(); insertEmoji('😭');">😭</button>
+              <button class="btn-emo" onclick="event.preventDefault(); insertEmoji('❤️');">❤️</button>
+            </div>
           </div>
         </form>
       </div>
