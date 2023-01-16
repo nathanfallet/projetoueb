@@ -123,6 +123,19 @@ def channels_messages(request, channel_id, page=1):
         message = Message(user=request.user, channel=channel, content=content, published=timezone.now())
         message.save()
 
+    if request.method == 'DELETE':
+        content = request.DELETE['content']
+        message = Message(user=request.user, channel=channel, content=content, published=timezone.now())
+        message.delete()
+
+    
+    if request.method == 'PUT':
+        content = request.PUT['content']
+        message = Message(user=request.user, channel=channel, content=content, published=timezone.now())
+        message.save()
+
+
+    
     messages = Message.objects.filter(channel=channel).order_by('-published')[(page-1)*10:(page)*10]
     
     return JsonResponse({
@@ -144,6 +157,7 @@ def channels_messages(request, channel_id, page=1):
             }
             for message in messages
         ]
+
     })
 
 @login_required

@@ -169,3 +169,38 @@ function deleteUser(channel, user) {
         }
     });
 }
+
+function deleteMessage(id){
+    const csrftoken = getCookie('csrftoken');
+    $.ajax({
+        url: "/channels/" + id + "/messages/",
+        type: "DELETE",
+        headers: {
+            "X-CSRFToken": csrftoken
+        },
+        success: function (data) {
+            location.reload();
+        }
+    });
+
+}
+
+function editMessage(id){
+    const csrftoken = getCookie('csrftoken');
+    $.ajax({
+        url: "/channels/" + id + "/messages/",
+        type: "PUT",
+        headers: {
+            "X-CSRFToken": csrftoken
+        },
+        data: {
+            "content": text
+        },
+        success: function (data) {
+            saveData(data);
+        }
+    });
+
+}
+
+
