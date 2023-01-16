@@ -90,24 +90,26 @@ def channels(request):
     })
 @login_required
 def channels_view(request, channel_id):
-    Membership.objects.get(user=request.user, channel=channel_id)
+    membership = Membership.objects.get(user=request.user, channel=channel_id)
     channel = Channel.objects.get(id=channel_id)
 
     template = loader.get_template('index.html')
     context = {
-        'channel': channel
+        'channel': channel,
+        'membership': membership
     }
     return HttpResponse(template.render(context, request))
 
 @login_required
 def channels_settings(request, channel_id):
-    Membership.objects.get(user=request.user, channel=channel_id)
+    membership = Membership.objects.get(user=request.user, channel=channel_id)
     channel = Channel.objects.get(id=channel_id)
     users = User.objects.exclude(id__in=[ membership.user.id for membership in channel.membership_set.all() ])
 
     template = loader.get_template('index.html')
     context = {
         'channel': channel,
+        'membership': membership,
         'users': users,
         'settings': True
     }
@@ -115,34 +117,36 @@ def channels_settings(request, channel_id):
 
 @login_required
 def channels_messages(request, channel_id, page=1):
-    Membership.objects.get(user=request.user, channel=channel_id)
+    membership = Membership.objects.get(user=request.user, channel=channel_id)
     channel = Channel.objects.get(id=channel_id)
 
     if request.method == 'POST':
         content = request.POST['content']
-        message = Message(user=request.user, channel=channel, content=content, published=timezone.now())
-        message.save()
+        message_id = request.POST['message_id']
+        if message_id != -1 and message_id != '-1':
+            message = Message.objects.get(id=message_id, channel=channel_id)
+            message.content = content
+            message.save()
+        else:
+            message = Message(user=request.user, channel=channel, content=content, published=timezone.now())
+            message.save()
 
     if request.method == 'DELETE':
-        content = request.DELETE['content']
-        message = Message(user=request.user, channel=channel, content=content, published=timezone.now())
+        message_id = page
+        message = Message.objects.get(id=message_id, channel=channel_id)
         message.delete()
+        return JsonResponse({})
 
-    
-    if request.method == 'PUT':
-        content = request.PUT['content']
-        message = Message(user=request.user, channel=channel, content=content, published=timezone.now())
-        message.save()
-
-
-    
     messages = Message.objects.filter(channel=channel).order_by('-published')[(page-1)*10:(page)*10]
     
     return JsonResponse({
         'channel': {
             'id': channel.id,
             'name': channel.name,
-            'logo': channel.logo
+            'logo': channel.logo,
+            'membership': {
+                'role': membership.role,
+            }
         },
         'messages': [
             {

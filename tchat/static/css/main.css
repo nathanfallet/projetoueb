@@ -123,6 +123,24 @@
     padding: 8px;
 }
 
+.balon1 .btns, .balon2 .btns {
+    display: none;
+}
+
+.balon1:hover .btns, .balon2:hover .btns {
+    display: inline-block;
+    position: absolute;
+    top: 0px;
+}
+
+.balon1:hover .btns {
+    right: 0px;
+}
+
+.balon2:hover .btns {
+    left: 0px;
+}
+
 @media (min-width: 768px) {
     
     .bd-placeholder-img-lg {
