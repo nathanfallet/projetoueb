@@ -1,6 +1,8 @@
+var channel = undefined;
 var messages = [];
 var page = 1;
 var emojisToggled = false;
+var editingMessage = -1;
 
 function getCookie(name) {
     let cookieValue = null;
@@ -19,6 +21,9 @@ function getCookie(name) {
 }
 
 function saveData(data) {
+    // Save channel
+    channel = data.channel;
+
     // Add messages that are not already saved
     for (let i = 0; i < data.messages.length; i++) {
         let found = false;
@@ -32,10 +37,12 @@ function saveData(data) {
             messages.push(data.messages[i]);
         }
     }
+
     // Sort by date
     messages.sort((a, b) => {
         return new Date(a['published']) - new Date(b['published']);
     });
+
     // Update HTML (DOM)
     updateHTML();
 }
@@ -46,7 +53,17 @@ function updateHTML() {
         items.push("<div class='balon" + (message['user']['me'] ? '1' : '2') + " p-2 m-0 position-relative' data-is='"
             + message['user']['username'] + " - "
             + new Date(message['published']).toLocaleString() + "'><span class='float-" + (message['user']['me'] ? 'end' : 'start') + "'>"
-            + message['content'] + "</span></div>")
+            + message['content'] + "</span>"
+            + (
+                message['user']['me'] || channel['membership']['role'] == 'owner' || channel['membership']['role'] == 'admin' ?
+                "<div class='btns'>"
+                + "<button class='btn btn-danger btn-sm' onclick='deleteMessage(" + channel['id'] + ", " + message['id'] + ")'><i class='fa-solid fa-trash'></i></button>"
+                + "<button class='btn btn-success btn-sm mx-1' onclick='preEditMessage(" + message['id'] + ")'><i class='fa-solid fa-pen'></i></button>"
+                + "</div>" :
+                ""
+            )
+            + "</div>"
+        );
     });
     $("#channel-messages").html(items.join(""));
 }
@@ -88,6 +105,7 @@ function sendMessage(id) {
 
     // Send it to server
     const csrftoken = getCookie('csrftoken');
+    const message_id = editingMessage;
     $.ajax({
         url: "/channels/" + id + "/messages/",
         type: "POST",
@@ -95,12 +113,17 @@ function sendMessage(id) {
             "X-CSRFToken": csrftoken
         },
         data: {
+            "message_id": message_id,
             "content": text
         },
         success: function (data) {
+            messages = messages.filter((message) => {
+                return message.id !== message_id;
+            });
             saveData(data);
         }
     });
+    editingMessage = -1;
 }
 
 function addUserToChannel(id) {
@@ -168,4 +191,29 @@ function deleteUser(channel, user) {
             location.reload();
         }
     });
+}
+
+function deleteMessage(id, message_id) {
+    const csrftoken = getCookie('csrftoken');
+    $.ajax({
+        url: "/channels/" + id + "/messages/" + message_id,
+        type: "DELETE",
+        headers: {
+            "X-CSRFToken": csrftoken
+        },
+        success: function (data) {
+            messages = messages.filter((message) => {
+                return message.id !== message_id;
+            });
+            updateHTML();
+        }
+    });
+}
+
+function preEditMessage(message_id) {
+    editingMessage = message_id;
+    let message = messages.find((message) => {
+        return message['id'] == message_id;
+    });
+    $("#message-text").val(message.content);
 }
