@@ -12,7 +12,8 @@
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+    crossorigin="anonymous">
   <link href="{% static 'css/main.css' %}" rel="stylesheet">
 </head>
 
@@ -42,14 +43,16 @@
               <div class="ms-auto">
                 {% if membership.role == 'owner' or membership.role == 'admin' %}
                 {% if user_membership.role != 'owner' %}
-                <button onclick="deleteUser({{ channel.id }}, {{ user_membership.user.id }});"><i class="fa-solid fa-trash"></i></button>
+                <button onclick="deleteUser({{ channel.id }}, {{ user_membership.user.id }});"><i
+                    class="fa-solid fa-trash"></i></button>
                 {% endif %}
                 {% endif %}
               </div>
             </div>
           </span>
           {% endfor %}
-          <a href="#" class="list-group-item list-group-item-action py-3 lh-sm" data-bs-toggle="modal" data-bs-target="#addUserModal">
+          <a href="#" class="list-group-item list-group-item-action py-3 lh-sm" data-bs-toggle="modal"
+            data-bs-target="#addUserModal">
             <div class="d-flex w-100 align-items-center justify-content-between">
               <strong class="mb-1"><i class="fa-solid fa-plus"></i> Add user</strong>
             </div>
@@ -66,12 +69,14 @@
             </div>
           </a>
           {% if membership.role == 'owner' or membership.role == 'admin' %}
-          <a href="#" class="list-group-item list-group-item-action py-3 lh-sm" data-bs-toggle="modal" data-bs-target="#editChannelModal">
+          <a href="#" class="list-group-item list-group-item-action py-3 lh-sm" data-bs-toggle="modal"
+            data-bs-target="#editChannelModal">
             <div class="d-flex w-100 align-items-center justify-content-between">
               <strong class="mb-1">Edit conversation</strong>
             </div>
           </a>
-          <a href="#" onclick="deleteChannel({{ channel.id }});" class="list-group-item list-group-item-action py-3 lh-sm">
+          <a href="#" onclick="deleteChannel({{ channel.id }});"
+            class="list-group-item list-group-item-action py-3 lh-sm">
             <div class="d-flex w-100 align-items-center justify-content-between">
               <strong class="mb-1">Delete conversation</strong>
             </div>
@@ -88,7 +93,8 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              <form id="add-user-form" class="w-100" onsubmit="event.preventDefault(); addUserToChannel({{ channel.id }})">
+              <form id="add-user-form" class="w-100"
+                onsubmit="event.preventDefault(); addUserToChannel({{ channel.id }})">
                 <div class="mb-3">
                   <label for="user-select" class="form-label">User</label>
                   <select class="form-select" id="user-select">
@@ -104,25 +110,27 @@
         </div>
       </div>
       <div class="modal fade" id="editChannelModal" tabindex="-1" aria-labelledby="editChannelModalLabel"
-      aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="editChannelModalLabel">Edit conversation</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <form id="create-channel-form" class="w-100" onsubmit="event.preventDefault(); editChannel({{ channel.id }})">
-              <div class="mb-3">
-                <label for="channel-name" class="form-label">Name</label>
-                <input type="text" class="form-control" id="channel-name" placeholder="Conversation name" value="{{ channel.name }}">
-              </div>
-              <button type="submit" class="btn btn-custom">Edit conversation</button>
-            </form>
+        aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="editChannelModalLabel">Edit conversation</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form id="create-channel-form" class="w-100"
+                onsubmit="event.preventDefault(); editChannel({{ channel.id }})">
+                <div class="mb-3">
+                  <label for="channel-name" class="form-label">Name</label>
+                  <input type="text" class="form-control" id="channel-name" placeholder="Conversation name"
+                    value="{{ channel.name }}">
+                </div>
+                <button type="submit" class="btn btn-custom">Edit conversation</button>
+              </form>
+            </div>
           </div>
         </div>
       </div>
-    </div>
       {% else %}
       <span
         class="tchat-header d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom position-fixed fixed-top w-100">
@@ -147,34 +155,10 @@
               aria-describedby="button-addon2">
             <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Send</button>
             <button class="btn btn-outline-secondary" onclick="event.preventDefault(); showEmojis();">Emojis</button>
-            <div id="emoji-keyboard" style="display: none;">
-              <button class="btn-emo" onclick="event.preventDefault(); insertEmoji('😀');">😀</button>
-              <button class="btn-emo" onclick="event.preventDefault(); insertEmoji('😘');">😘</button>
-              <button class="btn-emo" onclick="event.preventDefault(); insertEmoji('😭');">😭</button>
-              <button class="btn-emo" onclick="event.preventDefault(); insertEmoji('❤️');">❤️</button>
-              <button class="btn-emo" onclick="event.preventDefault(); insertEmoji('😂');">😂</button>
-              <button class="btn-emo" onclick="event.preventDefault(); insertEmoji('😋');">😋</button>
-              <button class="btn-emo" onclick="event.preventDefault(); insertEmoji('😉');">😉</button>
-              <button class="btn-emo" onclick="event.preventDefault(); insertEmoji('😎');">😎</button>
-              <button class="btn-emo" onclick="event.preventDefault(); insertEmoji('😡');">😡</button>
-              <button class="btn-emo" onclick="event.preventDefault(); insertEmoji('😱');">😱</button>
-              <button class="btn-emo" onclick="event.preventDefault(); insertEmoji('😴');">😴</button>
-              <button class="btn-emo" onclick="event.preventDefault(); insertEmoji('🤔');">🤔</button>
-              <button class="btn-emo" onclick="event.preventDefault(); insertEmoji('😏');">😏</button>
-              <button class="btn-emo" onclick="event.preventDefault(); insertEmoji('🤣');">🤣</button>
-              <button class="btn-emo" onclick="event.preventDefault(); insertEmoji('🤩');">🤩</button>
-              <button class="btn-emo" onclick="event.preventDefault(); insertEmoji('🤪');">🤪</button>
-              <button class="btn-emo" onclick="event.preventDefault(); insertEmoji('🤯');">🤯</button>
-              <button class="btn-emo" onclick="event.preventDefault(); insertEmoji('🤬');">🤬</button>
-              <button class="btn-emo" onclick="event.preventDefault(); insertEmoji('🤮');">🤮</button>
-              <button class="btn-emo" onclick="event.preventDefault(); insertEmoji('🤢');">🤢</button>
-              <button class="btn-emo" onclick="event.preventDefault(); insertEmoji('😵');">😵</button>
-              <button class="btn-emo" onclick="event.preventDefault(); insertEmoji('🤧');">🤧</button>
-              <button class="btn-emo" onclick="event.preventDefault(); insertEmoji('🥵');">🥵</button>
-              <button class="btn-emo" onclick="event.preventDefault(); insertEmoji('🥶');">🥶</button>
-              <button class="btn-emo" onclick="event.preventDefault(); insertEmoji('🥴');">🥴</button>
-              <button class="btn-emo" onclick="event.preventDefault(); insertEmoji('🤠');">🤠</button>
-              <button class="btn-emo" onclick="event.preventDefault(); insertEmoji('🤡');">🤡</button>
+            <div id="emoji-keyboard" class="text-center m-3 p-2" style="display: none;">
+              {% for emoji in emojis %}
+              <button class="btn btn-emo" onclick="event.preventDefault(); insertEmoji('{{ emoji }}');">{{ emoji }}</button>
+              {% endfor %}
             </div>
           </div>
         </form>

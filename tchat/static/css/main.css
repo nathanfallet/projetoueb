@@ -119,8 +119,9 @@
     position: fixed;
     bottom: 70px;
     right: 0px;
-    max-width: 25%;
-    padding: 8px;
+    max-width: 50%;
+    background-color: #f1f1f1;
+    border-radius: 20px;
 }
 
 .balon1 .btns, .balon2 .btns {

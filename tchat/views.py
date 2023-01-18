@@ -9,6 +9,11 @@ from django.utils import timezone
 
 from .models import Channel, Message, Membership
 
+emojis = [
+    '😀', '😘', '😭', '❤️', '😂', '😋', '😉', '😎', '😡', '😱', '😴', '🤔', '😏', '🤣',
+    '🤩', '🤪', '🤯', '🤬', '🤮', '🤢', '😵', '🤧', '🥵', '🥶', '🥴', '🤠', '🤡', '🍆'
+]
+
 @login_required
 def index(request):
     memberships = (Membership.objects
@@ -113,7 +118,8 @@ def channels_view(request, channel_id):
     template = loader.get_template('index.html')
     context = {
         'channel': channel,
-        'membership': membership
+        'membership': membership,
+        'emojis': emojis
     }
     return HttpResponse(template.render(context, request))
 
