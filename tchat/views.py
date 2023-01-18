@@ -107,7 +107,10 @@ def channels_view(request, channel_id):
     channel = Channel.objects.get(id=channel_id)
     
     if request.method == 'DELETE':
-        channel.delete()
+        if membership.role == 'owner':
+            channel.delete()
+        else :
+            membership.delete()
         return JsonResponse({})
 
     if request.method == 'POST':
