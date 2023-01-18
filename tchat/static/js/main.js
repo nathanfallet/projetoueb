@@ -24,6 +24,9 @@ function saveData(data) {
     // Save channel
     channel = data.channel;
 
+    // Save last message id from messages
+    let lastMessageId = messages.length > 0 ? messages[messages.length - 1].id : -1;
+
     // Add messages that are not already saved
     for (let i = 0; i < data.messages.length; i++) {
         let found = false;
@@ -45,6 +48,12 @@ function saveData(data) {
 
     // Update HTML (DOM)
     updateHTML();
+
+    // Check if there is a newer message (to scroll)
+    let newMessageId = messages.length > 0 ? messages[messages.length - 1].id : -1;
+    if (lastMessageId !== newMessageId) {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
 }
 
 function updateHTML() {
