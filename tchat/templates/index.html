@@ -43,6 +43,10 @@
               <div class="ms-auto">
                 {% if membership.role == 'owner' or membership.role == 'admin' %}
                 {% if user_membership.role != 'owner' %}
+                <select onchange="editUserRole({{ channel.id }}, {{ user_membership.user.id }}, this.value);">
+                  <option value="admin" {% if user_membership.role == 'admin' %}selected{% endif %}>Admin</option>
+                  <option value="member" {% if user_membership.role == 'member' %}selected{% endif %}>Member</option>
+                </select>
                 <button onclick="deleteUser({{ channel.id }}, {{ user_membership.user.id }});"><i
                     class="fa-solid fa-trash"></i></button>
                 {% endif %}

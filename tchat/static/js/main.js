@@ -187,6 +187,24 @@ function insertEmoji(emo) {
     $("#message-text").val(text + emo);
 }
 
+function editUserRole(channel, user, role) {
+    // Send it to server
+    const csrftoken = getCookie('csrftoken');
+    $.ajax({
+        url: "/channels/" + channel + "/users/" + user + "/",
+        type: "POST",
+        headers: {
+            "X-CSRFToken": csrftoken
+        },
+        data: {
+            "role": role
+        },
+        success: function (data) {
+            location.reload();
+        }
+    });
+}
+
 function deleteUser(channel, user) {
     // Send it to server
     const csrftoken = getCookie('csrftoken');
