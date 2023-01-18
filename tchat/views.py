@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db.models import Max
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.template import loader
@@ -10,7 +11,10 @@ from .models import Channel, Message, Membership
 
 @login_required
 def index(request):
-    memberships = Membership.objects.filter(user=request.user)
+    memberships = (Membership.objects
+        .filter(user=request.user)
+        .annotate(last_message=(Max('channel__message__published')))
+        .order_by('-last_message'))
 
     template = loader.get_template('index.html')
     context = {
@@ -77,7 +81,10 @@ def channels(request):
         membership = Membership(user=request.user, channel=channel, role='owner', last_read=timezone.now())
         membership.save()
 
-    memberships = Membership.objects.filter(user=request.user)
+    memberships = (Membership.objects
+        .filter(user=request.user)
+        .annotate(last_message=(Max('channel__message__published')))
+        .order_by('-last_message'))
     return JsonResponse({
         'channels': [
             {
