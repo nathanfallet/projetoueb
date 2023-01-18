@@ -217,3 +217,17 @@ function preEditMessage(message_id) {
     });
     $("#message-text").val(message.content);
 }
+
+function deleteChannel(channel_id) {
+    const csrftoken = getCookie('csrftoken');
+    $.ajax({
+        url: "/channels/" + channel_id,
+        type: "DELETE",
+        headers: {
+            "X-CSRFToken": csrftoken
+        },
+        success: function (data) {
+            window.location.href = "/";
+        }
+    });
+}

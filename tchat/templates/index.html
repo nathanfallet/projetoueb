@@ -66,12 +66,12 @@
             </div>
           </a>
           {% if membership.role == 'owner' or membership.role == 'admin' %}
-          <a href="#" class="list-group-item list-group-item-action py-3 lh-sm">
+          <a href="#" onclick="editChannel({{ channel.id }});" class="list-group-item list-group-item-action py-3 lh-sm">
             <div class="d-flex w-100 align-items-center justify-content-between">
               <strong class="mb-1">Edit conversation</strong>
             </div>
           </a>
-          <a href="#" class="list-group-item list-group-item-action py-3 lh-sm">
+          <a href="#" onclick="deleteChannel({{ channel.id }});" class="list-group-item list-group-item-action py-3 lh-sm">
             <div class="d-flex w-100 align-items-center justify-content-between">
               <strong class="mb-1">Delete conversation</strong>
             </div>
