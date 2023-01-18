@@ -88,11 +88,21 @@ def channels(request):
             for membership in memberships
         ]
     })
+    
 @login_required
 def channels_view(request, channel_id):
     membership = Membership.objects.get(user=request.user, channel=channel_id)
     channel = Channel.objects.get(id=channel_id)
+    
+    if request.method == 'DELETE':
+        channel.delete()
+        return JsonResponse({})
 
+    if request.method == 'POST':
+        channel.name = request.POST['name']
+        channel.save()
+        return JsonResponse({})
+        
     template = loader.get_template('index.html')
     context = {
         'channel': channel,
@@ -105,7 +115,7 @@ def channels_settings(request, channel_id):
     membership = Membership.objects.get(user=request.user, channel=channel_id)
     channel = Channel.objects.get(id=channel_id)
     users = User.objects.exclude(id__in=[ membership.user.id for membership in channel.membership_set.all() ])
-
+    
     template = loader.get_template('index.html')
     context = {
         'channel': channel,
