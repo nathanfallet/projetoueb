@@ -98,6 +98,11 @@ def channels_view(request, channel_id):
         channel.delete()
         return JsonResponse({})
 
+    if request.method == 'POST':
+        channel.name = request.POST['name']
+        channel.save()
+        return JsonResponse({})
+        
     template = loader.get_template('index.html')
     context = {
         'channel': channel,

@@ -66,7 +66,7 @@
             </div>
           </a>
           {% if membership.role == 'owner' or membership.role == 'admin' %}
-          <a href="#" onclick="editChannel({{ channel.id }});" class="list-group-item list-group-item-action py-3 lh-sm">
+          <a href="#" class="list-group-item list-group-item-action py-3 lh-sm" data-bs-toggle="modal" data-bs-target="#editChannelModal">
             <div class="d-flex w-100 align-items-center justify-content-between">
               <strong class="mb-1">Edit conversation</strong>
             </div>
@@ -103,6 +103,26 @@
           </div>
         </div>
       </div>
+      <div class="modal fade" id="editChannelModal" tabindex="-1" aria-labelledby="editChannelModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editChannelModalLabel">Edit conversation</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="create-channel-form" class="w-100" onsubmit="event.preventDefault(); editChannel({{ channel.id }})">
+              <div class="mb-3">
+                <label for="channel-name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="channel-name" placeholder="Conversation name" value="{{ channel.name }}">
+              </div>
+              <button type="submit" class="btn btn-custom">Edit conversation</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
       {% else %}
       <span
         class="tchat-header d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom position-fixed fixed-top w-100">

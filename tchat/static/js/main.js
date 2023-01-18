@@ -72,7 +72,7 @@ function loadNextPage(id) {
     // Get messages from JSON
     page++;
     $.ajax({
-        url: "/channels/" + id + "/messages/" + page,
+        url: "/channels/" + id + "/messages/" + page + "/",
         type: "GET",
         success: function (data) {
             if (data.messages.length == 0) {
@@ -182,7 +182,7 @@ function deleteUser(channel, user) {
     // Send it to server
     const csrftoken = getCookie('csrftoken');
     $.ajax({
-        url: "/channels/" + channel + "/users/" + user,
+        url: "/channels/" + channel + "/users/" + user + "/",
         type: "DELETE",
         headers: {
             "X-CSRFToken": csrftoken
@@ -196,7 +196,7 @@ function deleteUser(channel, user) {
 function deleteMessage(id, message_id) {
     const csrftoken = getCookie('csrftoken');
     $.ajax({
-        url: "/channels/" + id + "/messages/" + message_id,
+        url: "/channels/" + id + "/messages/" + message_id + "/",
         type: "DELETE",
         headers: {
             "X-CSRFToken": csrftoken
@@ -221,13 +221,31 @@ function preEditMessage(message_id) {
 function deleteChannel(channel_id) {
     const csrftoken = getCookie('csrftoken');
     $.ajax({
-        url: "/channels/" + channel_id,
+        url: "/channels/" + channel_id + "/",
         type: "DELETE",
         headers: {
             "X-CSRFToken": csrftoken
         },
         success: function (data) {
             window.location.href = "/";
+        }
+    });
+}
+
+function editChannel(channel_id) {
+    let name = $("#channel-name").val();
+    const csrftoken = getCookie('csrftoken');
+    $.ajax({
+        url: "/channels/" + channel_id + "/",
+        type: "POST",
+        headers: {
+            "X-CSRFToken": csrftoken
+        },
+        data: {
+            "name": name
+        },
+        success: function (data) {
+            location.reload();
         }
     });
 }
