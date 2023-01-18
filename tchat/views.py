@@ -193,10 +193,16 @@ def channels_users(request, channel_id, user_id=None):
     channel = Channel.objects.get(id=channel_id)
 
     if request.method == 'POST':
-        user_id = request.POST['user']
-        user = User.objects.get(id=user_id)
-        membership = Membership(user=user, channel=channel, role='member', last_read=timezone.now())
-        membership.save()
+        if user_id is None:
+            user_id = request.POST['user']
+            user = User.objects.get(id=user_id)
+            membership = Membership(user=user, channel=channel, role='member', last_read=timezone.now())
+            membership.save()
+        else:
+            role = request.POST['role']
+            membership = Membership.objects.get(user=user_id, channel=channel_id)
+            membership.role = role
+            membership.save()
     
     if request.method == 'DELETE' and user_id is not None:
         membership = Membership.objects.get(user=user_id, channel=channel_id)
