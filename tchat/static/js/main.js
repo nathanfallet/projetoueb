@@ -20,6 +20,15 @@ function getCookie(name) {
     return cookieValue;
 }
 
+function escapeHtml(unsafe) {
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
 function saveData(data) {
     // Save channel
     channel = data.channel;
@@ -62,7 +71,7 @@ function updateHTML() {
         items.push("<div class='balon" + (message['user']['me'] ? '1' : '2') + " p-2 m-0 position-relative' data-is='"
             + message['user']['username'] + " - "
             + new Date(message['published']).toLocaleString() + "'><span class='float-" + (message['user']['me'] ? 'end' : 'start') + "'>"
-            + message['content'] + "</span>"
+            + escapeHtml(message['content']) + "</span>"
             + (
                 message['user']['me'] || channel['membership']['role'] == 'owner' || channel['membership']['role'] == 'admin' ?
                 "<div class='btns'>"
