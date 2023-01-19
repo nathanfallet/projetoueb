@@ -61,6 +61,12 @@ def account_register(request):
         try:
             user = User.objects.create_user(username, email, password)
             login(request, user)
+
+            defaultChannel = Channel.objects.filter(name='General').first()
+            if defaultChannel is not None:
+                membership = Membership(user=user, channel=defaultChannel, role='member', last_read=timezone.now())
+                membership.save()
+
             return redirect('/')
         except:
             error = 'Username or email already taken'
