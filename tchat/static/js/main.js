@@ -111,6 +111,9 @@ function sendMessage(id) {
     // Get message, and clear text
     let text = $("#message-text").val();
     $("#message-text").val("");
+    if (text === "") {
+        return;
+    }
 
     // Send it to server
     const csrftoken = getCookie('csrftoken');
