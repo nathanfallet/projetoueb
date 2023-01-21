@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-# Create your models here.
+# A channel
 class Channel(models.Model):
     name = models.CharField(max_length=50)
     logo = models.TextField()
@@ -13,6 +13,7 @@ class Channel(models.Model):
     def lastMessage(self):
         return self.message_set.order_by('-published').first()
 
+# A message, created by a user in a channel
 class Message(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     channel = models.ForeignKey(Channel, on_delete=models.CASCADE)
@@ -22,6 +23,7 @@ class Message(models.Model):
     def __str__(self):
         return 'Message from ' + self.user.username + ' in ' + self.channel.name + ': ' + self.content
 
+# The membership of a user in a channel
 class Membership(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     channel = models.ForeignKey(Channel, on_delete=models.CASCADE)
